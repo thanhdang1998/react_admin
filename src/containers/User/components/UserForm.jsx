@@ -1,15 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Navigate, useParams } from "react-router-dom";
 import Menu from "../../Layout/Sidebar/Menu"
 import Nav from "../../Layout/Topbar/Nav"
 import { yupResolver } from '@hookform/resolvers/yup';
+import { SelectField } from '@/shared/components/form/Select';
 import * as yup from "yup";
 
 const schema = yup.object({
-    first_name: yup.string().required(),
-    last_name: yup.string().required(),
+    first_name: yup.string().required('First name is required').max(10, 'Must be more then one character'),
+    last_name: yup.string().required('Last name is required').max(255),
+    email: yup.string().email('Must be a valid email').required('Email is required').max(255),
+    role_id: yup.number().required(),
 }).required();
 
 const UserForm = () => {
@@ -17,6 +20,10 @@ const UserForm = () => {
     const [roles, setRoles] = useState([]);
     const [redirect, setRedirect] = useState(false);
     const [user, setUser] = useState();
+
+    const { register, handleSubmit, formState, reset, control} = useForm({
+        resolver: yupResolver(schema)
+    });
 
     useEffect(() => {
         (
@@ -31,10 +38,6 @@ const UserForm = () => {
         )()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const { register, handleSubmit, formState, reset} = useForm({
-        resolver: yupResolver(schema)
-    });
 
     useEffect(() => {
         if(user) {
@@ -110,6 +113,20 @@ const UserForm = () => {
                                     })}
                                 </select>
                             </div>
+
+                            <Controller
+                                control={control}
+                                name="role_id"
+                                render={({field}) => {
+                                    return (
+                                        <SelectField 
+                                            {...field}
+                                            value={field}
+                                        />
+                                    )
+                                }}
+                                {...register("role_id")}
+                            />
 
                             <button className="bth bth-outline-secondary">Save</button>
                         </form>

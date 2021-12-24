@@ -93,9 +93,7 @@ const RoleForm = () => {
                                                     type="checkbox"
                                                     // eslint-disable-next-line array-callback-return
                                                     checked={selected.map(s => {
-                                                        if(s === permission.id) {
-                                                            return "checked";
-                                                        }
+                                                        if(s === permission.id) return true;
                                                     })}
                                                     value={permission.id}
                                                     {...register("permissions")}
