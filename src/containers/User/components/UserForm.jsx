@@ -32,27 +32,29 @@ const UserForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const { register, handleSubmit, reset, formState } = useForm({
+    const { register, handleSubmit, formState, reset} = useForm({
         resolver: yupResolver(schema)
     });
+
     useEffect(() => {
         if(user) {
             reset({
                 first_name: user?.first_name,
                 last_name: user?.last_name,
-            })
+                email: user?.email,
+                role_id: user?.role?.id,
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
     const onSubmit = async (data) => {
-        console.log(data);
-        // if(id === undefined) {
-        //     await axios.post('user/create',data);
-        // } else {
-        //     await axios.put(`user/update/${id}`,data);
-        // }
-        // setRedirect(true);
+        if(id === undefined) {
+            await axios.post('user/create',data);
+        } else {
+            await axios.put(`user/update/${id}`,data);
+        }
+        setRedirect(true);
     }
 
     if(redirect === true) {
@@ -72,7 +74,6 @@ const UserForm = () => {
                                 <input 
                                     type="text"
                                     className="form-control"
-                                    //onChange={(e) => setValue('first_name', e.target.value)}
                                     {...register("first_name")} 
                                 />
                                 <span>{formState.errors?.first_name?.message}</span>

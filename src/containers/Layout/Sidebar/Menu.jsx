@@ -11,6 +11,9 @@ const Menu = () => {
                 <li className="nav-item">
                   <NavLink to={'/user'} className="nav-link active">User</NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink to={'/role'} className="nav-link active">Role</NavLink>
+                </li>
               </ul>
             </div>
         </nav>
